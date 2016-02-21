@@ -1,0 +1,11 @@
+---
+eureka:
+  instance:
+    hostname: localhost
+  client:  # Not a client, don't register with yourself
+    registerWithEureka: false
+    fetchRegistry: false
+
+---
+spring:
+  profiles: dev

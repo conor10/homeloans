@@ -1,0 +1,18 @@
+---
+server:
+  port: 8001
+
+website:
+  credit-check:
+    url: http://credit-check/
+  submission:
+    url: http://submission/
+
+---
+spring:
+  profiles: dev
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
