@@ -9,10 +9,10 @@ import com.acme.homeloans.service.SubmissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -21,7 +21,7 @@ import java.util.concurrent.Future;
 /**
  * Web controller.
  */
-@Controller
+@RestController
 public class LoanController {
 
     private static Logger log = LoggerFactory.getLogger(LoanController.class);
@@ -33,10 +33,10 @@ public class LoanController {
     private CreditService creditService;
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String signup(@ModelAttribute Borrower borrower) {
-        processApplication(borrower);
+    public SubmissionResponse signup(@ModelAttribute Borrower borrower) {
+        SubmissionResponse submissionResponse = processApplication(borrower);
 
-        return "index";
+        return submissionResponse;
     }
 
     private SubmissionResponse processApplication(Borrower borrower) {
@@ -45,6 +45,7 @@ public class LoanController {
             // error
         }
 
+        // add timeout's to jobs & default for Optional.get()
         Submission submission = buildSubmission(borrower, creditScore.get());
         Future<SubmissionResponse> submissionResponseFuture = submissionService.submit(submission);
         Optional<SubmissionResponse> submissionResponse = Optional.empty();
@@ -54,7 +55,6 @@ public class LoanController {
         } catch (InterruptedException|ExecutionException e) {
             log.warn("Error processing submission", e);
         }
-
         return submissionResponse.get();
     }
 

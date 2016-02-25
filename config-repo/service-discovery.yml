@@ -6,6 +6,9 @@ eureka:
     registerWithEureka: false
     fetchRegistry: false
 
+server:
+  port: 8761
+
 ---
 spring:
   profiles: dev

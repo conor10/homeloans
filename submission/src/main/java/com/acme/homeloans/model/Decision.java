@@ -1,5 +1,6 @@
 package com.acme.homeloans.model;
 
+
 import javax.persistence.*;
 
 /**
@@ -9,7 +10,7 @@ import javax.persistence.*;
 public class Decision {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
     private boolean accepted;
@@ -51,5 +52,15 @@ public class Decision {
 
     public void setSubmission(Submission submission) {
         this.submission = submission;
+    }
+
+    @Override
+    public String toString() {
+        return "Decision{" +
+                "id=" + id +
+                ", accepted=" + accepted +
+                ", message='" + message + '\'' +
+                ", submission=" + submission +
+                '}';
     }
 }

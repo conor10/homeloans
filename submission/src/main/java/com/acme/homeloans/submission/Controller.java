@@ -3,9 +3,11 @@ package com.acme.homeloans.submission;
 import com.acme.homeloans.model.Decision;
 import com.acme.homeloans.model.Submission;
 import com.acme.homeloans.model.SubmissionResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,10 @@ import java.util.List;
 /**
  * Submission controller.
  */
+@RestController
 public class Controller {
+
+    private static final Logger log = LoggerFactory.getLogger(Controller.class);
 
     @Autowired
     private DecisionRepository decisionRepository;
@@ -22,12 +27,14 @@ public class Controller {
     private SubmissionRepository submissionRepository;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public SubmissionResponse submit(Submission submission) {
+    public SubmissionResponse submit(@RequestBody Submission submission) {
         Decision decision = makeDecision(submission);
 
         Submission savedSubmission = submissionRepository.save(submission);
         decision.setSubmission(savedSubmission);
         Decision savedDecision = decisionRepository.save(decision);
+
+        log.info("Decision made: {}", savedDecision);
 
         return new SubmissionResponse(
                 savedDecision.getId(), savedDecision.isAccepted(), savedDecision.getMessage());
@@ -56,7 +63,6 @@ public class Controller {
         Decision decision = new Decision();
         decision.setAccepted(accepted);
         decision.setMessage(formatMessage(message));
-
         return decision;
     }
 

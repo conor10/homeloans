@@ -2,23 +2,28 @@ package com.acme.homeloans;
 
 import com.acme.homeloans.models.Borrower;
 import com.acme.homeloans.models.CreditScore;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Credit check controller.
+ *
  */
+@RestController // alleviates need to use @ResponseBody
 public class Controller {
+
+    private static final Logger log = LoggerFactory.getLogger(Controller.class);
 
     private static final List<String> BAD_DOMAINS = Arrays.asList(
             "gmail.com", "hotmail.com", "yahoo.com"
     );
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public CreditScore submit(Borrower borrower) {
+    public CreditScore submit(@RequestBody Borrower borrower) {
         return getCreditScore(borrower);
     }
 
@@ -28,15 +33,18 @@ public class Controller {
 
         int score = 10;
         if (BAD_DOMAINS.stream().filter(p -> email.contains(p)).count() != 0) {
-            score =- 5;
+            score -= 5;
         }
 
         if (borrower.getSalary() < 20000.0) {
-            score =- 4;
+            score -= 4;
         }
 
         CreditScore creditScore = new CreditScore();
         creditScore.setScore(Math.max(0, score));
+
+        log.info("Credit score calculated: {}", creditScore);
+
         return creditScore;
     }
 }

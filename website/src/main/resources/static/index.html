@@ -43,10 +43,10 @@
                 </div>
                 <div class="col-md-6 col-md-offset-3 text-center">
                     <div class="col-md-6">
-                        <a href="#" class="btn btn-info btn-block" data-toggle="modal" data-target="#aboutModal">How does this work?</a>
+                        <a href="#" class="btn btn-info btn-block" data-toggle="modal" data-target="#about-modal">How does this work?</a>
                     </div>
                     <div class="col-md-6">
-                        <a href="#" class="btn btn-danger btn-block" data-toggle="modal" data-target="#signupModal">I'm sold! Sign me up</a>
+                        <a href="#" class="btn btn-danger btn-block" data-toggle="modal" data-target="#signup-modal">I'm sold! Sign me up</a>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
     </header>
 
     <!-- About modal -->
-    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -66,12 +66,13 @@
     </div>
 
     <!-- Signup modal -->
-    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="signup-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="/signup" method="post" class="form">
+                <form data-async data-target="#signup-modal" action="/signup" method="POST">
+                <!--<form action="/signup" method="post" class="form" id="loan-form">-->
                     <div class="modal-header">
-                        <h3>You've heard of low-doc, how about no-doc loans?</h3>
+                        <h3>No-doc loans for all!</h3>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -97,8 +98,64 @@
         </div>
     </div>
 
+    <div class="modal fade" id="status-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"></h3>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/jquery-2.2.0.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        jQuery(function($) {
+            $('form[data-async]').on('submit', function(event) {
+                var $form = $(this);
+                var $target = $($form.attr('data-target'));
+
+                $.ajax({
+                    type: $form.attr('method'),
+                    url: $form.attr('action'),
+                    data: $form.serialize(),
+
+                    success: function(data, status) {
+                        $target.modal('hide');
+                        $form.trigger("reset");
+
+                        var title = "";
+                        var message = "";
+                        if (data['accepted']) {
+                            title = "Congrats, your application was approved!";
+                            message = "Check your email to access your cash";
+                        } else {
+                            title = "Unlucky you weren't approved...";
+                            message = "Are you SURE you didn't lie about your details? (" + data['message'] + ")";
+                        }
+
+                        $('#status-modal').on('show.bs.modal', function (event) {
+                            var modal = $(this);
+                            modal.find('.modal-title').text(title);
+                            modal.find('.modal-body p').text(message);
+                        });
+
+                        $('#status-modal').modal();
+                    }
+                });
+
+                event.preventDefault();
+            });
+        });
+    </script>
 
 </body>
 </html>

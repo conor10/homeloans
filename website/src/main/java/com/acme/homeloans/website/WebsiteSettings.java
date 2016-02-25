@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * Website configuration
  */
 @Component
-@ConfigurationProperties(prefix="connection")
+@ConfigurationProperties(prefix="website")
 public class WebsiteSettings {
 
     public WebsiteSettings() { }

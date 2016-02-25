@@ -4,8 +4,10 @@ spring:
     config:
       server:
         git:
-          uri: file://${user.home}/code/java/homeloans/config/repo/
-#          uri: https://github.com/conor10/homeloans/config/repo
+          # we have to point to the repo base directory
+          uri: file://${user.home}/code/java/homeloans/
+#          uri: https://github.com/conor10/homeloans/
+          searchPaths: config-repo
 
 server:
   port: 8888

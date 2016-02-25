@@ -1,9 +1,19 @@
 package com.acme.homeloans.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Our submission.
  */
+@Entity
 public class Submission {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
 
     private String email;
     private float price;
@@ -11,6 +21,14 @@ public class Submission {
     private float salary;
 
     private int creditScore;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
@@ -50,5 +68,17 @@ public class Submission {
 
     public void setCreditScore(int creditScore) {
         this.creditScore = creditScore;
+    }
+
+    @Override
+    public String toString() {
+        return "Submission{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", price=" + price +
+                ", loanAmount=" + loanAmount +
+                ", salary=" + salary +
+                ", creditScore=" + creditScore +
+                '}';
     }
 }
