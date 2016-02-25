@@ -13,7 +13,7 @@ import java.util.List;
  * Credit check controller.
  *
  */
-@RestController // alleviates need to use @ResponseBody
+@RestController
 public class Controller {
 
     private static final Logger log = LoggerFactory.getLogger(Controller.class);

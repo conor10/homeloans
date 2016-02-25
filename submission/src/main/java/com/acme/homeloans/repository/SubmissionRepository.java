@@ -1,4 +1,4 @@
-package com.acme.homeloans.submission;
+package com.acme.homeloans.repository;
 
 import com.acme.homeloans.model.Submission;
 import org.springframework.data.repository.CrudRepository;

@@ -1,12 +1,13 @@
-package com.acme.homeloans.submission;
+package com.acme.homeloans;
 
 import com.acme.homeloans.model.Decision;
 import com.acme.homeloans.model.Submission;
 import com.acme.homeloans.model.SubmissionResponse;
+import com.acme.homeloans.repository.DecisionRepository;
+import com.acme.homeloans.repository.SubmissionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,10 +30,7 @@ public class Controller {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public SubmissionResponse submit(@RequestBody Submission submission) {
         Decision decision = makeDecision(submission);
-
-        Submission savedSubmission = submissionRepository.save(submission);
-        decision.setSubmission(savedSubmission);
-        Decision savedDecision = decisionRepository.save(decision);
+        Decision savedDecision = save(submission, decision);
 
         log.info("Decision made: {}", savedDecision);
 
@@ -40,7 +38,7 @@ public class Controller {
                 savedDecision.getId(), savedDecision.isAccepted(), savedDecision.getMessage());
     }
 
-    private Decision makeDecision(Submission submission) {
+    Decision makeDecision(Submission submission) {
 
         List<String> message = new ArrayList<>(3);
         boolean accepted = true;
@@ -55,7 +53,7 @@ public class Controller {
             message.add("[Bad credit] A credit score less then 1? Seriously???");
         }
 
-        if (submission.getSalary() * 10. > submission.getLoanAmount()) {
+        if (submission.getSalary() * 10. < submission.getLoanAmount()) {
             accepted = false;
             message.add("[Low salary] What are you buying? A penthouse?");
         }
@@ -69,5 +67,11 @@ public class Controller {
     private String formatMessage(List<String> message) {
         return message.stream().reduce(
                 "Unmet criteria (if any):", (a, b) -> a + "\n" + b);
+    }
+
+    private Decision save(Submission submission, Decision decision) {
+        Submission savedSubmission = submissionRepository.save(submission);
+        decision.setSubmission(savedSubmission);
+        return decisionRepository.save(decision);
     }
 }

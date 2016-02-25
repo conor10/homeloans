@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Borrower {
 
     private String email;
-    private float price;
-    private float loanAmount;
-    private float salary;
+    private double price;
+    private double loanAmount;
+    private double salary;
 
     public Borrower() { }
 
@@ -23,27 +23,27 @@ public class Borrower {
         this.email = email;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public float getLoanAmount() {
+    public double getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(float loanAmount) {
+    public void setLoanAmount(double loanAmount) {
         this.loanAmount = loanAmount;
     }
 
-    public float getSalary() {
+    public double getSalary() {
         return salary;
     }
 
-    public void setSalary(float salary) {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 

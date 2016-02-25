@@ -21,10 +21,10 @@ import java.util.concurrent.Future;
 /**
  * Web controller.
  */
-@RestController
-public class LoanController {
+@RestController  // alleviates need to use @ResponseBody
+public class Controller {
 
-    private static Logger log = LoggerFactory.getLogger(LoanController.class);
+    private static Logger log = LoggerFactory.getLogger(Controller.class);
 
     @Autowired
     private SubmissionService submissionService;
@@ -47,6 +47,7 @@ public class LoanController {
 
         // add timeout's to jobs & default for Optional.get()
         Submission submission = buildSubmission(borrower, creditScore.get());
+
         Future<SubmissionResponse> submissionResponseFuture = submissionService.submit(submission);
         Optional<SubmissionResponse> submissionResponse = Optional.empty();
 

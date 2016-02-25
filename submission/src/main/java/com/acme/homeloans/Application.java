@@ -1,4 +1,4 @@
-package com.acme.homeloans.submission;
+package com.acme.homeloans;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

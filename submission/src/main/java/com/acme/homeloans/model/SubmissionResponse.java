@@ -1,12 +1,17 @@
 package com.acme.homeloans.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Submission response.
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class SubmissionResponse {
     private boolean accepted;
     private String message;
     private long submissionId;
+
+    public SubmissionResponse() { }
 
     public SubmissionResponse(long submissionId, boolean accepted, String message) {
         this.submissionId = submissionId;
