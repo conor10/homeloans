@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Controller unit tests.
  */
-public class TestController {
+public class ControllerTests {
 
     private Controller controller = new Controller();
 

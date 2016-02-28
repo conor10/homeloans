@@ -4,8 +4,9 @@ spring:
     name: submission
 
   profiles:
-      active: dev
+    active: dev
 
   cloud:
-      config:
-        uri: http://localhost:8888
+    config:
+      uri: http://localhost:8888
+      failFast: true

@@ -2,9 +2,10 @@
 eureka:
   instance:
     hostname: localhost
-  client:  # Not a client, don't register with yourself
-    registerWithEureka: false
-    fetchRegistry: false
+  # Uncomment to run in stand-alone mode - i.e. don't search for peers
+#  client:
+#    registerWithEureka: false
+#    fetchRegistry: false
 
 server:
   port: 8761

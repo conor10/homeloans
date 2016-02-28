@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
  * Controller unit tests.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TestController {
+public class ControllerTests {
 
     @Mock
     DecisionRepository decisionRepository;

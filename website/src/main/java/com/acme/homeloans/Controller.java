@@ -1,11 +1,13 @@
-package com.acme.homeloans.website;
+package com.acme.homeloans;
 
 import com.acme.homeloans.model.Borrower;
 import com.acme.homeloans.model.CreditScore;
 import com.acme.homeloans.model.Submission;
 import com.acme.homeloans.model.SubmissionResponse;
+import com.acme.homeloans.service.CreditScoreException;
 import com.acme.homeloans.service.CreditService;
 import com.acme.homeloans.service.SubmissionService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Web controller.
@@ -40,36 +44,41 @@ public class Controller {
     }
 
     private SubmissionResponse processApplication(Borrower borrower) {
-        Optional<CreditScore> creditScore = getCreditScore(borrower);
-        if (!creditScore.isPresent()) {
-            // error
-        }
+        CreditScore creditScore = getCreditScore(borrower);
 
-        // add timeout's to jobs & default for Optional.get()
-        Submission submission = buildSubmission(borrower, creditScore.get());
+        Submission submission = buildSubmission(borrower, creditScore);
+        SubmissionResponse submissionResponse = submitApplication(submission);
 
-        Future<SubmissionResponse> submissionResponseFuture = submissionService.submit(submission);
-        Optional<SubmissionResponse> submissionResponse = Optional.empty();
-
-        try {
-            submissionResponse = Optional.of(submissionResponseFuture.get());
-        } catch (InterruptedException|ExecutionException e) {
-            log.warn("Error processing submission", e);
-        }
-        return submissionResponse.get();
+        return submissionResponse;
     }
 
-    private Optional<CreditScore> getCreditScore(Borrower borrower) {
-        Future<CreditScore> creditScoreFuture = creditService.getCreditScore(borrower);
-        Optional<CreditScore> creditScore = Optional.empty();
 
+    private CreditScore getCreditScore(Borrower borrower) {
         try {
-            creditScore = Optional.of(creditScoreFuture.get());
-        } catch (InterruptedException|ExecutionException e) {
-            log.warn("Credit score could not be obtained", e);
+            return creditService.getCreditScore(borrower);
+        } catch (CreditScoreException e) {
+            // This should never be called using Hysterix
+            throw new RuntimeException("Unable to process Credit Score", e);
         }
+    }
 
-        return creditScore;
+    /*
+     * This service is not using Hystrix to provide a comparison of how an equivalent
+     * async implementation may appear.
+     */
+    private SubmissionResponse submitApplication(Submission submission) {
+        try {
+            Future<SubmissionResponse> submissionResponseFuture = submissionService.submit(submission);
+            SubmissionResponse submissionResponse = submissionResponseFuture.get(5, TimeUnit.SECONDS);
+            return submissionResponse;
+        } catch (Throwable t) {
+            String message = "There were issues processing application";
+            log.warn(message, t);
+            SubmissionResponse submissionResponse = new SubmissionResponse();
+            submissionResponse.setAccepted(false);
+            submissionResponse.setMessage(message + t.getMessage());
+            return submissionResponse;
+        }
     }
 
     private Submission buildSubmission(Borrower borrower, CreditScore creditScore) {

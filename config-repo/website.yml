@@ -8,16 +8,24 @@ website:
   submission:
     url: http://submission/
 
+hystrix:
+  command:
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: 2
+      # This sets our rolling window size, see:
+      # https://groups.google.com/forum/#!topic/hystrixoss/H1w03TQj1f8
+      # https://github.com/Netflix/Hystrix/wiki/Configuration#metricsrollingstatstimeinmilliseconds
+      metrics:
+        rollingStats:
+          # Set this high for testing
+          timeInMilliseconds: 3000000
+
 ---
 spring:
   profiles: dev
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-
-#logging:
-#  level:
-#    org:
-#      TRACE
+logging:
+  level:
+    com.acme.homeloans: DEBUG
+#    ROOT: DEBUG

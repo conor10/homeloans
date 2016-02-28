@@ -47,7 +47,8 @@ public class SubmissionIT {
         submission.setPrice(100);
         submission.setSalary(100);
 
-        ResponseEntity<SubmissionResponse> responseEntity = restTemplate.postForEntity("http://localhost:" + port, submission, SubmissionResponse.class);
+        ResponseEntity<SubmissionResponse> responseEntity = restTemplate.postForEntity(
+                "http://localhost:" + port, submission, SubmissionResponse.class);
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody().isAccepted(), is(true));
 

@@ -53,7 +53,7 @@ public class Controller {
             message.add("[Bad credit] A credit score less then 1? Seriously???");
         }
 
-        if (submission.getSalary() * 10. < submission.getLoanAmount()) {
+        if (submission.getSalary() * 100. < submission.getLoanAmount()) {
             accepted = false;
             message.add("[Low salary] What are you buying? A penthouse?");
         }

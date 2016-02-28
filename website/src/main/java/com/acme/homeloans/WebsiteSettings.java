@@ -1,4 +1,4 @@
-package com.acme.homeloans.website;
+package com.acme.homeloans;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

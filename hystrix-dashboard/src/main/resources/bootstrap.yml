@@ -1,7 +1,7 @@
 ---
 spring:
   application:
-    name: service-discovery
+    name: hystrix-dashboard
 
   profiles:
     active: dev

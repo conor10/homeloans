@@ -5,7 +5,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 /**
- * Service registry server Netflix-Eureka
+ * Service registry server Netflix Eureka.
  */
 @SpringBootApplication
 @EnableEurekaServer
@@ -14,3 +14,4 @@ public class Application {
         new SpringApplicationBuilder(Application.class).web(true).run(args);
     }
 }
+
