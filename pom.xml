@@ -79,6 +79,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <addResources>true</addResources>
+                </configuration>
+
             </plugin>
             <!-- Add integration test directory sources -->
             <plugin>
@@ -116,11 +120,6 @@
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.5</version>
-                <configuration>
-                    <junitArtifactName>
-                        org.junit:com.springsource.org.junit
-                    </junitArtifactName>
-                </configuration>
                 <executions>
                     <execution>
                         <id>integration-test</id>

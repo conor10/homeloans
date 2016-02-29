@@ -2,6 +2,7 @@ package com.acme.homeloans;
 
 import com.acme.homeloans.models.Borrower;
 import com.acme.homeloans.models.CreditScore;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;

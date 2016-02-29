@@ -81,7 +81,7 @@ public class Controller {
         }
     }
 
-    private Submission buildSubmission(Borrower borrower, CreditScore creditScore) {
+    private static Submission buildSubmission(Borrower borrower, CreditScore creditScore) {
         Submission submission = new Submission();
 
         submission.setEmail(borrower.getEmail());

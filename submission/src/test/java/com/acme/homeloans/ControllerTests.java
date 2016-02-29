@@ -63,9 +63,9 @@ public class ControllerTests {
         submission.setCreditScore(0);
         submission.setLoanAmount(110);
         submission.setPrice(100);
-        submission.setSalary(100);
+        submission.setSalary(1);
 
-        Decision decision = controller.makeDecision(getValidDecision());
+        Decision decision = controller.makeDecision(submission);
         assertThat(decision.isAccepted(), is(false));
     }
 

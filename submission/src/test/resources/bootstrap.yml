@@ -1,0 +1,10 @@
+---
+spring:
+  cloud:
+    config:
+      failFast: false
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
